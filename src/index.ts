@@ -113,3 +113,4 @@ class LambdaSimpleEvent {
     return this.authContext;
   }
 }
+module.exports = LambdaSimpleEvent;
