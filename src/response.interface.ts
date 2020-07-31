@@ -7,5 +7,4 @@ export interface HttpResponse {
   statusCode: number;
   headers: ResponseHeaders;
   body: string;
-  isBase64Encoded: boolean;
 }

@@ -18,7 +18,7 @@ const LambdaSimpleEvent = require('@mattnick/lambda-simple-event');
 exports.handler = async (event) => {
     return new Promise((resolve) => {
         const lse = new LambdaSimpleEvent(event);
-        return resolve(lse.success(200,{message: "OK"}, false));
+        return resolve(lse.success(200,{message: "OK"}));
     })
 };
 
@@ -27,8 +27,9 @@ const LambdaSimpleEvent = require('@mattnick/lambda-simple-event');
 
 exports.handler = async (event) => {
     return new Promise((resolve) => {
-        const lse = new LambdaSimpleEvent(event, 'example.com');
-        return resolve(lse.success(200,{message: "OK"}, false));
+        const lse = new LambdaSimpleEvent(event);
+        lse.setAllowOriginHeaders('example.com');
+        return resolve(lse.success(200,{message: "OK"}));
     })
 };
 ```
@@ -56,7 +57,7 @@ exports.handler = async (event) => {
         var key3 = lse.getPostBody('key3');
         // null
 
-        return resolve(lse.success(200,{message: "OK"}, false));
+        return resolve(lse.success(200,{message: "OK"}));
     })
 };
 ```
@@ -84,7 +85,7 @@ exports.handler = async (event) => {
         var key3 = lse.getQueryString('key3');
         // null
 
-        return resolve(lse.success(200,{message: "OK"}, false));
+        return resolve(lse.success(200,{message: "OK"}));
     })
 };
 ```
@@ -112,7 +113,7 @@ exports.handler = async (event) => {
         var key3 = lse.getPathParameters('key3');
         // null
 
-        return resolve(lse.success(200,{message: "OK"}, false));
+        return resolve(lse.success(200,{message: "OK"}));
     })
 };
 ```
@@ -136,7 +137,7 @@ exports.handler = async (event) => {
         }
         */
 
-        return resolve(lse.success(200,{message: "OK"}, false));
+        return resolve(lse.success(200,{message: "OK"}));
     })
 };
 ```
@@ -170,7 +171,7 @@ exports.handler = async (event) => {
 		var apiID = lse.getApiID();
 		// a3fc4e
 
-        return resolve(lse.success(200,{message: "OK"}, false));
+        return resolve(lse.success(200,{message: "OK"}));
     })
 };
 ```
@@ -187,9 +188,7 @@ exports.handler = async (event) => {
         var body = {
 	        message: "Hello World"
         };
-        var isBase64 = false //Used for binary, defaults to false
-
-        return resolve(lse.success(statusCode, body, isBase64))
+        return resolve(lse.success(statusCode, body))
     })
 };
 
@@ -200,9 +199,7 @@ exports.handler = async (event) => {
         var body = {
 	        message: "Something went wrong"
         };
-        var isBase64 = false //Used for binary, defaults to false
-
-        return resolve(lse.error(statusCode, body, isBase64))
+        return resolve(lse.error(statusCode, body))
     })
 };
 ```

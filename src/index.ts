@@ -1,5 +1,4 @@
 import { HttpResponse } from './response.interface';
-import Buffer = require('buffer');
 
 class LambdaSimpleEvent {
   private resourcePath: string;
@@ -14,10 +13,9 @@ class LambdaSimpleEvent {
   private authContext: any = null;
   private stageVariables: any;
 
-  private originHeader: string;
+  private originHeader: string = "*";
 
-  constructor(private event: any, private AllowOriginHeader: string = '*') {
-    this.originHeader = AllowOriginHeader;
+  constructor(private event: any) {
 
     this.resourcePath = event.requestContext.resourcePath;
     this.resourceMethod = event.requestContext.httpMethod;
@@ -33,7 +31,7 @@ class LambdaSimpleEvent {
     this.authContext = event.requestContext.authorizer ? event.requestContext.authorizer : null;
   }
 
-  public success(statusCode: number = 200, body: any = null, isBase64Encoded: boolean = false): HttpResponse {
+  public success(statusCode: number = 200, body: any = null): HttpResponse {
     const bodyEncoded = !body ? 'OK' : JSON.stringify(body);
     return {
       "statusCode": statusCode,
@@ -42,12 +40,11 @@ class LambdaSimpleEvent {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Headers': 'x-api-key,*',
       },
-      "body": isBase64Encoded ? Buffer.Buffer.from(bodyEncoded).toString('base64') : bodyEncoded,
-      "isBase64Encoded": isBase64Encoded,
+      "body": bodyEncoded
     };
   }
 
-  public error(statusCode: number = 400, body: any = null, isBase64Encoded: boolean = false): HttpResponse {
+  public error(statusCode: number = 400, body: any = null): HttpResponse {
     const bodyEncoded = !body ? 'OK' : JSON.stringify(body);
     return {
       "statusCode": statusCode,
@@ -56,8 +53,7 @@ class LambdaSimpleEvent {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Headers': 'x-api-key,*',
       },
-      "body": isBase64Encoded ? Buffer.Buffer.from(bodyEncoded).toString('base64') : bodyEncoded,
-      "isBase64Encoded": isBase64Encoded,
+      "body": bodyEncoded
     };
   }
 
@@ -111,6 +107,10 @@ class LambdaSimpleEvent {
 
   public getAuthorizerContext(): any {
     return this.authContext;
+  }
+  
+  public setAllowOriginHeaders(headers: string){
+	  this.originHeader = headers;
   }
 }
 module.exports = LambdaSimpleEvent;
